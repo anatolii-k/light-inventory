@@ -2,9 +2,9 @@
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "light-inventory",
   "version": "0.1.0",
-  "identifier": "com.tauri.dev",
+  "identifier": "anatolii.k",
   "build": {
-    "frontendDist": "../dist",
+    "frontendDist": "../dist/light-inventory/browser",
     "devUrl": "http://localhost:4200",
     "beforeDevCommand": "ng serve",
     "beforeBuildCommand": "ng build"
@@ -13,8 +13,8 @@
     "windows": [
       {
         "title": "light-inventory",
-        "width": 800,
-        "height": 600,
+        "width": 1100,
+        "height": 900,
         "resizable": true,
         "fullscreen": false
       }
