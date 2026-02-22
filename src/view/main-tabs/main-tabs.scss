@@ -1,0 +1,8 @@
+@use '@angular/material' as mat;
+
+:host ::ng-deep {
+  .mat-mdc-tab.mdc-tab--active {
+    background-color: var(--mat-sys-surface-container-low);
+  }
+
+}
