@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { invoke } from "@tauri-apps/api/core";
-import { from, Observable } from 'rxjs';
+import { from, Observable, shareReplay } from 'rxjs';
 
 export interface OwnerInfo{
     name:string;
@@ -10,7 +10,11 @@ export interface OwnerInfo{
 @Injectable( {providedIn: 'root'} )
 export class OwnerService{
 
-    getOwnerInfo() : Observable<OwnerInfo>  {
-        return from(invoke<OwnerInfo>('get_owner_info'));  
+    private readonly ownerInfo$ = from(invoke<OwnerInfo>('get_owner_info')).pipe(
+        shareReplay(1)
+    );
+
+    getOwnerInfo(): Observable<OwnerInfo> {
+        return this.ownerInfo$;
     }
 }
