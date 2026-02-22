@@ -1,6 +1,6 @@
-mod owner_commands;
+mod owner;
 
-use owner_commands::get_owner_info;
+use owner::get_owner_info;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {

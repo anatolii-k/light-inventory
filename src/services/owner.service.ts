@@ -3,7 +3,8 @@ import { invoke } from "@tauri-apps/api/core";
 import { from, Observable } from 'rxjs';
 
 export interface OwnerInfo{
-    name:string
+    name:string;
+    division:string;
 }
 
 @Injectable( {providedIn: 'root'} )
