@@ -1,0 +1,7 @@
+<div class="error-alert">
+    <div class="error_alert-user-msg">ERROR: {{userError()?.message}}</div>
+    @if( userError()?.details !== undefined) {
+        <div>Details: {{userError()?.details}}</div>
+    }
+</div>
+
