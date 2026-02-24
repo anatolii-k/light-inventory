@@ -5,7 +5,8 @@ import { map, startWith, switchMap } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
 
 import { Product, ProductCatalogService } from '../../services/product-catalog.service'
-import { inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable, Signal, signal } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 
 /**
@@ -13,19 +14,21 @@ import { inject, Injectable } from '@angular/core';
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-@Injectable()
 export class ProductCatalogListDataSource extends DataSource<Product> {
   paginator: MatPaginator | undefined;
   sort: MatSort | undefined;
 
-  private readonly service = inject(ProductCatalogService);
-  readonly totalCount$ = this.service.getProductCatalog().pipe(
-        map(data => data.length)
-    );
+  readonly data = signal<Product[]>([]);
+  private readonly data$ = toObservable(this.data);
+
 
   constructor() {
     super();
   }
+
+  setData(data: Product[]): void {
+      this.data.set(data);
+  }  
 
   /**
    * Connect this data source to the table. The table will only update when
@@ -36,11 +39,8 @@ export class ProductCatalogListDataSource extends DataSource<Product> {
     if (this.paginator && this.sort) {
       // Combine everything that affects the rendered data into one update
       // stream for the data-table to consume.
-      return merge(this.paginator.page, this.sort.sortChange)
-        .pipe(
-          startWith(null),
-          switchMap(() => this.service.getProductCatalog()),
-          map( data => this.getPagedData(this.getSortedData([...data])) ) );
+      return merge(this.paginator.page, this.sort.sortChange, this.data$)
+        .pipe( map(() => this.getPagedData(this.getSortedData([...this.data()]))) );
     } else {
       throw Error('Please set the paginator and sort on the data source before connecting.');
     }

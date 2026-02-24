@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, effect, inject, input, ViewChild } from '@angular/core';
 import { MatTableModule, MatTable } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatSortModule, MatSort } from '@angular/material/sort';
@@ -11,14 +11,15 @@ import { toSignal } from '@angular/core/rxjs-interop';
   templateUrl: './product-catalog-list.component.html',
   styleUrl: './product-catalog-list.component.css',
   imports: [MatTableModule, MatPaginatorModule, MatSortModule],
-  providers: [ProductCatalogListDataSource]
 })
 export class ProductCatalogListComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<Product>;
-  dataSource = inject(ProductCatalogListDataSource)
-  totalCount = toSignal(this.dataSource.totalCount$, { initialValue: 0 });
+
+  productList = input<Product[]|undefined>();
+  dataSource = new ProductCatalogListDataSource();
+  readonly totalCount = computed(() => this.dataSource.data().length);
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['id', 'name', 'unit'];
@@ -27,5 +28,14 @@ export class ProductCatalogListComponent implements AfterViewInit {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.table.dataSource = this.dataSource;
+  }
+
+  constructor(){
+    effect( () => {
+      const data = this.productList();
+      if (data !== undefined) {
+         this.dataSource.setData(data);
+      }
+    });
   }
 }

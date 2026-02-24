@@ -1,5 +1,11 @@
 <div class="product-catalog">
     <h2 class="label">Каталог товарів</h2>
-    <app-product-catalog-list></app-product-catalog-list>
+    @if( productCatalogData()?.isOk ){
+        <app-product-catalog-list [productList]="productCatalogData()?.data"></app-product-catalog-list>
+    }
+    @else {
+        <app-error-alert [userError]="productCatalogData()?.error" ></app-error-alert>
+    }
+    
 </div>
 
