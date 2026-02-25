@@ -1,7 +1,9 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
+mod repository;
+use repository::FileRepository as Repository;
 
-#[derive(Serialize)]
+#[derive(Serialize,Deserialize)]
 pub struct Product {
   id: u32,
   name: String,
@@ -15,19 +17,11 @@ pub struct ProductCatalogData {
   data: Vec<Product>,
 }
 
-fn get_tmp_data() -> Vec<Product> {
-    vec![
-        Product{ id: 1, name: "Золото вагове".to_string(), unit: "гр".to_string() },
-        Product{ id: 2, name: "Золото злиток 100 гр".to_string(), unit: "шт".to_string() },
-        Product{ id: 5, name: "Срібло вагове".to_string(), unit: "гр".to_string() },
-        Product{ id: 6, name: "Срібло злиток 100 гр".to_string(), unit: "шт".to_string() },
-        Product{ id: 100, name: "Мідь лом вагова".to_string(), unit: "кг".to_string() },
-        Product{ id: 335, name: "Дріт оцинкований".to_string(), unit: "м".to_string() },
-        Product{ id: 336, name: "Дріт оцинкований d2".to_string(), unit: "м".to_string() },
-    ]
-}
-
 #[tauri::command]
 pub fn get_product_catalog() -> ProductCatalogData {
-    ProductCatalogData { is_ok: true, error: String::new(), data: get_tmp_data() }
+    let result = Repository::get_product_catalog();
+    match result {
+        Ok(product_list) => ProductCatalogData { is_ok: true, error: String::new(), data: product_list },
+        Err(err) => ProductCatalogData { is_ok:false, error: err, data: Vec::new() },
+    }
 }

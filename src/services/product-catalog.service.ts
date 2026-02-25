@@ -22,12 +22,13 @@ interface ProductCatalogResponse {
   data: Product[];
 }
 
+
 function dataIsOk( productList: Product[] ): ProductCatalogData {
   return { isOk: true, error: {message:"", details:""}, data: productList }
 }
 
 function dataIsError( errMsg : string) : ProductCatalogData {
-  const msg = "Failure during communication to Tauri backend";
+  const msg = "Failed to load Product catalog";
   return { isOk: false, error: { message: msg, details: errMsg }, data: [] }
 }
 

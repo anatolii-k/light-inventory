@@ -13,7 +13,7 @@
     "windows": [
       {
         "title": "light-inventory",
-        "width": 1100,
+        "width": 1400,
         "height": 900,
         "resizable": true,
         "fullscreen": false
