@@ -1,10 +1,9 @@
-import { AfterViewInit, Component, computed, effect, inject, input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, effect, input, ViewChild } from '@angular/core';
 import { MatTableModule, MatTable } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { ProductCatalogListDataSource } from './product-catalog-list-datasource';
-import { Product, ProductCatalogService } from '../../services/product-catalog.service';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Product } from '../../services/product-catalog.service';
 
 @Component({
   selector: 'app-product-catalog-list',
@@ -25,6 +24,8 @@ export class ProductCatalogListComponent implements AfterViewInit {
   displayedColumns = ['id', 'name', 'unit'];
 
   ngAfterViewInit(): void {
+    this.paginator._intl.itemsPerPageLabel = "Товарів на сторінці:";
+
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.table.dataSource = this.dataSource;
