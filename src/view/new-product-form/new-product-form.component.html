@@ -39,7 +39,9 @@
               [disabled]="addressForm.invalid||addressForm.pending"> 
           Підтвердити 
       </button>
-      <button matButton="elevated" type="cancel" class="cancel-btn" (click)="onCancel()">Відміна</button>
+      <button matButton="elevated" type="button" class="cancel-btn" (click)="onCancel()">
+        Скасувати
+      </button>
     </mat-card-actions>
   </mat-card>
 </form>
