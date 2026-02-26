@@ -1,0 +1,45 @@
+<form [formGroup]="addressForm" novalidate (ngSubmit)="onSubmit()">
+  <mat-card class="new-product-form">
+
+    <mat-card-header>
+      <mat-card-title>Новий Товар</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <div>
+        <mat-form-field class="full-width">
+          <input matInput placeholder="Назва товара" formControlName="product_name">
+          @if (addressForm.controls['product_name'].hasError('required')) {
+            <mat-error><strong>*</strong> Обов'язкове поле</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <br>
+
+      <div>
+        <mat-form-field >
+          <mat-select placeholder="Один. виміру" formControlName="unit">
+            @for (unit of units; track unit) {
+              <mat-option [value]="unit">{{ unit }}</mat-option>
+            }
+          </mat-select>
+          @if (addressForm.controls['unit'].hasError('required')) {
+            <mat-error><strong>*</strong> Обов'язкове поле</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      </mat-card-content>
+
+    <mat-card-actions>
+      <button matButton="filled" 
+              type="submit" 
+              [disabled]="addressForm.invalid||addressForm.pending"> 
+          Підтвердити 
+      </button>
+      <button matButton="elevated" type="cancel" class="cancel-btn" (click)="onCancel()">Відміна</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

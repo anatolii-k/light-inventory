@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { invoke } from '@tauri-apps/api/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { UserError } from './user-error';
+import { Response } from './response';
 
 
 export interface Product {
@@ -10,58 +11,70 @@ export interface Product {
   unit: string;
 }
 
+export interface NewProductRequest {
+  name: string,
+  unit: string,
+  
+}
+
 export interface ProductCatalogData {
   isOk : boolean;
   error: UserError;
   data: Product[];
 }
 
-interface ProductCatalogResponse {
-  is_ok : boolean;
-  error: string;
+
+interface ProductCatalogResponse extends Response {
   data: Product[];
 }
 
 
-function dataIsOk( productList: Product[] ): ProductCatalogData {
+function dataOk( productList: Product[] ): ProductCatalogData {
   return { isOk: true, error: {message:"", details:""}, data: productList }
 }
 
-function dataIsError( errMsg : string) : ProductCatalogData {
-  const msg = "Failed to load Product catalog";
+function dataLoadError( errMsg : string) : ProductCatalogData {
+  const msg = "Сталась помилка при завантажені Каталогу Товарів";
   return { isOk: false, error: { message: msg, details: errMsg }, data: [] }
 }
+
+function dataAddError( errMsg : string) : ProductCatalogData {
+  const msg = "Сталась помилка при створені нового Товару";
+  return { isOk: false, error: { message: msg, details: errMsg }, data: [] }
+}
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductCatalogService {
 
-  catalog$ = new BehaviorSubject<ProductCatalogData>( dataIsOk([]) );
+  catalog$ = new BehaviorSubject<ProductCatalogData>( dataOk([]) );
 
   constructor(){
-    this._loadData();
+    this.reloadData();
   }
   
   getProductCatalog(): Observable<ProductCatalogData> {
       return this.catalog$.asObservable();
   }
 
-  addProduct(product: Product): void {
-      //this.catalog$.next([...this.catalog$.getValue(), product]);
-      this._loadData();
+  addProduct(product: NewProductRequest): void {
+    invoke<Response>('add_product_to_catalog', { request: product })
+          .then( resp => this.reloadData() )
+          .catch( err => this.catalog$.next( dataAddError( String(err) ) ) );   
   }
   
-  _loadData() {
+  reloadData() {
     invoke<ProductCatalogResponse>('get_product_catalog')
     .then( data =>  {
         if( data.is_ok ) {
-          this.catalog$.next( dataIsOk(data.data) )
+          this.catalog$.next( dataOk(data.data) )
         }
         else {
-          this.catalog$.next( dataIsError( data.error ) );
+          this.catalog$.next( dataLoadError( data.error ) );
         }
     })
-    .catch( err => this.catalog$.next( dataIsError( String(err) ) ) )
+    .catch( err => this.catalog$.next( dataLoadError( String(err) ) ) )
   }
 }

@@ -1,7 +1,7 @@
 <div class="error-alert">
-    <div class="error_alert-user-msg">ERROR: {{userError()?.message}}</div>
+    <div class="error_alert-user-msg">Помилка: {{userError()?.message}}</div>
     @if( userError()?.details !== undefined) {
-        <div>Details: {{userError()?.details}}</div>
+        <div>Детальна інформація: {{userError()?.details}}</div>
     }
 </div>
 

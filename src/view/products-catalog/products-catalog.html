@@ -1,10 +1,35 @@
 <div class="product-catalog">
+    
     <h2 class="label">Каталог товарів</h2>
-    @if( productCatalogData()?.isOk ){
-        <app-product-catalog-list [productList]="productCatalogData()?.data"></app-product-catalog-list>
+
+    @if( isAddingProduct() ) {
+        <app-new-product-form 
+            (submited)="onSubmitNewProduct($event)" 
+            (cancelled)="onCancelAddNewProduct()">
+        </app-new-product-form>
     }
     @else {
-        <app-error-alert [userError]="productCatalogData()?.error" ></app-error-alert>
+
+        @if( productCatalogData()?.isOk ){
+
+            <div class="buttons-row">
+                <button matButton="elevated" (click)="onAddProduct()"> 
+                    <mat-icon>add</mat-icon> 
+                    Додати Товар
+                </button>
+            </div>
+
+            <app-product-catalog-list [productList]="productCatalogData()?.data"></app-product-catalog-list>
+        }
+        @else {
+            <app-error-alert [userError]="productCatalogData()?.error" ></app-error-alert>
+            <div class="error-button-row">
+                <button matButton="filled" (click)="onReload()">
+                    <mat-icon>refresh</mat-icon>
+                    Перезавантажити
+                </button>
+            </div>
+        }
     }
     
 </div>
