@@ -1,5 +1,6 @@
 mod owner;
 mod product_catalog;
+pub mod common;
 
 use owner::get_owner_info;
 use product_catalog::get_product_catalog;
