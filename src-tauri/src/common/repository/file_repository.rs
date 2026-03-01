@@ -10,12 +10,12 @@ enum FileMode {
     APPEND,
 }
 
-pub struct FileBasicRepository<T> {
+pub struct FileBasicRepository<T:Send> {
    file_path: PathBuf,
    _marker: PhantomData<T>,
 }
 
-impl<T> FileBasicRepository<T> {
+impl<T:Send> FileBasicRepository<T> {
 
    pub fn new(file_path: PathBuf) -> Self {
       Self{ file_path, _marker: PhantomData }
@@ -38,7 +38,7 @@ impl<T> FileBasicRepository<T> {
 
 }
 
-impl <T> BasicRepository<T> for FileBasicRepository<T>
+impl <T:Send> BasicRepository<T> for FileBasicRepository<T>
 where for<'a> T: Serialize + Deserialize<'a> {
 
     fn get_all(&mut self) -> Result<Vec<T>,String> {
@@ -62,7 +62,6 @@ where for<'a> T: Serialize + Deserialize<'a> {
             rawline.clear();
         }
         Ok(result)
-
     }
 
     fn save_new_item(&mut self, item: &T) -> Result<(),String>{

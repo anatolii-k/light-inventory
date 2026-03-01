@@ -43,9 +43,8 @@ __screenshots__/
 .DS_Store
 Thumbs.db
 
-# .env
+# APP files
 .env
-
-# Demo
-
 /demo_data
+/package
+/build_package.py

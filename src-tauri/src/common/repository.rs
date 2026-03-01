@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 pub mod file_repository;
 pub mod file_repository_config;
-pub trait BasicRepository<T> 
+pub trait BasicRepository<T> : Send
    where for<'a> T: Serialize + Deserialize<'a> {
 
    fn get_all(&mut self) -> Result<Vec<T>,String>;

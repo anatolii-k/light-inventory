@@ -6,10 +6,12 @@ pub struct OwnerInfo{
     division: String,
 }
 
+const OWNER_NAME: &str = "Light Store";
+
 #[tauri::command]
 pub fn get_owner_info() -> OwnerInfo {
     OwnerInfo{
-        name: "Light Store".to_string(),
+        name: OWNER_NAME.to_string(),
         division: "Склад".to_string(),
     }
 }
