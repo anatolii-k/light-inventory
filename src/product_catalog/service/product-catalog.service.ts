@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { invoke } from '@tauri-apps/api/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { UserError } from './user-error';
-import { Response } from './response';
+import { UserError } from '../../common/service/user-error';
+import { Response } from '../../common/service/response';
 
 
 export interface Product {

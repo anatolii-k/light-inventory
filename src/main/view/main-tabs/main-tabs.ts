@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {MatTabsModule} from '@angular/material/tabs';
-import { ProductsCatalog } from '../products-catalog/products-catalog';
+import { ProductsCatalog } from '../../../product_catalog/view/products-catalog/products-catalog';
 
 @Component({
   selector: 'app-main-tabs',

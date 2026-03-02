@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
-import { NewProductRequest } from '../../services/product-catalog.service';
+import { NewProductRequest } from '../../service/product-catalog.service';
 
 @Component({
   selector: 'app-new-product-form',

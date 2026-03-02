@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { map, startWith, switchMap } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
 
-import { Product, ProductCatalogService } from '../../services/product-catalog.service'
+import { Product, ProductCatalogService } from '../../service/product-catalog.service'
 import { computed, inject, Injectable, Signal, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 

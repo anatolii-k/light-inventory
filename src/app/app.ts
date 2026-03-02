@@ -1,9 +1,9 @@
 import { Component, Signal, signal, WritableSignal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { OwnerInfo, OwnerService } from '../services/owner.service';
+import { OwnerInfo, OwnerService } from '../owner/service/owner.service';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { MainNavbar } from '../view/main-navbar/main-navbar';
-import { MainTabs } from '../view/main-tabs/main-tabs';
+import { MainNavbar } from '../main/view/main-navbar/main-navbar';
+import { MainTabs } from '../main/view/main-tabs/main-tabs';
 
 @Component({
   selector: 'app-root',

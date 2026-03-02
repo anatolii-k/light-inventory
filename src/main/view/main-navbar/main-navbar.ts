@@ -1,5 +1,5 @@
 import { Component, computed, Signal } from '@angular/core';
-import { OwnerInfo, OwnerService } from '../../services/owner.service';
+import { OwnerInfo, OwnerService } from '../../../owner/service/owner.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {MatToolbarModule} from '@angular/material/toolbar';
 

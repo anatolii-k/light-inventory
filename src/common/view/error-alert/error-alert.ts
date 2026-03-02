@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { UserError } from '../../services/user-error';
+import { UserError } from '../../service/user-error';
 
 @Component({
   selector: 'app-error-alert',
