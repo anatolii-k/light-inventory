@@ -4,21 +4,21 @@ import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
 import { Observable, merge } from 'rxjs';
 
-import { Product } from '../../service/product-catalog.service'
 import { signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
+import {Counterparty} from "../../service/counterparties.service";
 
 
 /**
- * Data source for the ProductCatalogList view. This class should
+ * Data source for the CounterpartiesList view. This class should
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-export class ProductCatalogListDataSource extends DataSource<Product> {
+export class CounterpartiesDataSource extends DataSource<Counterparty> {
   paginator: MatPaginator | undefined;
   sort: MatSort | undefined;
 
-  readonly data = signal<Product[]>([]);
+  readonly data = signal<Counterparty[]>([]);
   private readonly data$ = toObservable(this.data);
 
 
@@ -26,7 +26,7 @@ export class ProductCatalogListDataSource extends DataSource<Product> {
     super();
   }
 
-  setData(data: Product[]): void {
+  setData(data: Counterparty[]): void {
       this.data.set(data);
   }  
 
@@ -35,7 +35,7 @@ export class ProductCatalogListDataSource extends DataSource<Product> {
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-  connect(): Observable<Product[]> {
+  connect(): Observable<Counterparty[]> {
     if (this.paginator && this.sort) {
       // Combine everything that affects the rendered data into one update
       // stream for the data-table to consume.
@@ -56,7 +56,7 @@ export class ProductCatalogListDataSource extends DataSource<Product> {
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getPagedData(data: Product[]): Product[] {
+  private getPagedData(data: Counterparty[]): Counterparty[] {
     if (this.paginator) {
       const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
       return data.splice(startIndex, this.paginator.pageSize);
@@ -69,7 +69,7 @@ export class ProductCatalogListDataSource extends DataSource<Product> {
    * Sort the data (client-side). If you're using server-side sorting,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getSortedData(data: Product[]): Product[] {
+  private getSortedData(data: Counterparty[]): Counterparty[] {
     if (!this.sort || !this.sort.active || this.sort.direction === '') {
       return data;
     }
@@ -78,7 +78,7 @@ export class ProductCatalogListDataSource extends DataSource<Product> {
       const isAsc = this.sort?.direction === 'asc';
       switch (this.sort?.active) {
         case 'name': return compare(a.name, b.name, isAsc);
-        case 'id': return compare(+a.id, +b.id, isAsc);
+        case 'legal_id': return compare(a.id, b.id, isAsc);
         default: return 0;
       }
     });

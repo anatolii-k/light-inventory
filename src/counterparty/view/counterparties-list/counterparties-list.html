@@ -1,0 +1,84 @@
+<div class="mat-elevation-z2">
+
+    <!-- Sort & Paggination -->
+    <mat-paginator #paginator
+                   [length]="totalCount()"
+                   [pageIndex]="0"
+                   [pageSize]="10"
+                   [pageSizeOptions]="[5, 10, 20]"
+                   aria-label="Select page">
+    </mat-paginator>
+
+    <!-- TABLE -->
+    <table mat-table class="full-width-table" matSort aria-label="Elements" multiTemplateDataRows>
+        <!-- Legal Id Column -->
+        <ng-container matColumnDef="legal_id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ЄДРПОУ</th>
+            <td mat-cell *matCellDef="let row">{{row.legal_id}}</td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Назва</th>
+            <td mat-cell *matCellDef="let row">{{row.name}}</td>
+        </ng-container>
+
+        <!-- Address Column -->
+        <ng-container matColumnDef="address">
+            <th mat-header-cell *matHeaderCellDef>Адреса</th>
+            <td mat-cell *matCellDef="let row">{{row.address}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="expand">
+            <th mat-header-cell *matHeaderCellDef aria-label="row actions" style="text-align: center">Повна інформація</th>
+            <td mat-cell *matCellDef="let row">
+                <div style="display: flex; justify-content: center">
+                    <button
+                            matIconButton
+                            aria-label="expand row"
+                            (click)="toggle(row); $event.stopPropagation()"
+                            class="details-toggle-button"
+                            [class.details-toggle-button-expanded]="isExpanded(row)">
+                        <mat-icon>keyboard_arrow_down</mat-icon>
+                    </button>
+                </div>
+            </td>
+        </ng-container>
+
+        <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+        <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let row" [attr.colspan]="displayedColumns.length">
+                <div class="counterparty-detail-wrapper"
+                     [class.counterparty-detail-wrapper-expanded]="isExpanded(row)">
+                    <div class="counterparty-detail">
+                        <mat-card class="details-card" appearance="outlined">
+                            <mat-card-header>
+                                <mat-card-title>{{row.name}}</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <br>
+                                <div>ЄДРПОУ: {{row.legal_id}}</div>
+                                <div>Адреса: {{row.address}}</div>
+                                <div>Тел.: {{row.phone}}</div>
+                                <div>Ел.пошта: {{row.email}}</div>
+                                <div>Р/р: {{row.payment_details?.account}}</div>
+                                <div>Банк: {{row.payment_details?.bank}}</div>
+                                <div>МФО: {{row.payment_details?.bank_id}}</div>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+            class="counterparty-row"
+            [class.counterparty-expanded-row]="isExpanded(row)">
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']"
+            class="counterparty-detail-row">
+        </tr>
+    </table>
+</div>
+

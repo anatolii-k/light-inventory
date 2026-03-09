@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { invoke } from '@tauri-apps/api/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { UserError } from '../../common/service/user-error';
-import { Response } from '../../common/service/response';
+import { ResponseStatus } from '../../common/service/responseStatus';
 
 
 export interface Product {
@@ -24,7 +24,7 @@ export interface ProductCatalogData {
 }
 
 
-interface ProductCatalogResponse extends Response {
+interface ProductCatalogResponse extends ResponseStatus {
   data: Product[];
 }
 
@@ -60,7 +60,7 @@ export class ProductCatalogService {
   }
 
   addProduct(product: NewProductRequest): void {
-    invoke<Response>('add_product_to_catalog', { request: product })
+    invoke<ResponseStatus>('add_product_to_catalog', { request: product })
           .then( resp => this.reloadData() )
           .catch( err => this.catalog$.next( dataAddError( String(err) ) ) );   
   }

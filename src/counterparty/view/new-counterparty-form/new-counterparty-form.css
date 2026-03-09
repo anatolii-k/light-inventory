@@ -1,0 +1,40 @@
+mat-card-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding-bottom: 20px;
+}
+
+mat-card-header {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.new-counterparty-form {
+    min-width: 500px;
+    margin: 50px;
+}
+
+
+.cancel-btn {
+    --mat-button-protected-label-text-color: var(--mat-sys-error);
+}
+
+.phone-input {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.email-input {
+    width: 30rem;
+}
+
+.bank-input {
+    width: 50rem;
+    margin-right: 1rem;
+}

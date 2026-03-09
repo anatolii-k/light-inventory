@@ -4,7 +4,7 @@ pub enum DbEntity {
    Stock,
    StockIn,
    StockOut,
-   CounterpartyCatalog,
+   Counterparties,
    ProductCatalog,
 }
 
@@ -14,7 +14,7 @@ impl DbEntity {
          DbEntity::Stock => "stock.db",
          DbEntity::StockIn => "stock_in.db",
          DbEntity::StockOut => "stock_out.db",
-         DbEntity::CounterpartyCatalog => "counterparty_catalog.db",
+         DbEntity::Counterparties => "counterparties.db",
          DbEntity::ProductCatalog => "product_catalog.db",
       }
    }

@@ -1,0 +1,37 @@
+<div class="counterparties">
+
+    <h2 class="label">Контрагенти</h2>
+
+    @if( isAddingNewCounterparty() ) {
+        <app-new-counterparty-form
+                (submited)="onSubmitNewCounterparty($event)"
+                (cancelled)="onCancelAddNewCounterparty()">
+        </app-new-counterparty-form>
+    }
+    @else {
+
+        @if( counterpartiesData()?.isOk ){
+
+            <div class="buttons-row">
+                <button matButton="elevated" (click)="onAddNewCounterparty()">
+                    <mat-icon>add</mat-icon>
+                    Додати Контрагента
+                </button>
+            </div>
+
+            <app-counterparties-list [counterpartiesList]="counterpartiesData()?.data"></app-counterparties-list>
+        }
+        @else {
+            <app-error-alert [userError]="counterpartiesData()?.error" ></app-error-alert>
+            <div class="error-button-row">
+                <button matButton="filled" (click)="onReload()">
+                    <mat-icon>refresh</mat-icon>
+                    Перезавантажити
+                </button>
+            </div>
+        }
+    }
+
+
+</div>
+

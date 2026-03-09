@@ -1,0 +1,95 @@
+<form [formGroup]="counterpartyForm" novalidate (ngSubmit)="onSubmit()">
+    <mat-card class="new-counterparty-form">
+
+        <mat-card-header>
+            <mat-card-title>Новий Контрагент</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <div>
+                <mat-form-field class="full-width">
+                    <input matInput placeholder="Назва" formControlName="name">
+                    @if (counterpartyForm.controls['name'].hasError('required')) {
+                        <mat-error><strong>*</strong> Обов'язкове поле</mat-error>
+                    }
+                </mat-form-field>
+            </div>
+            <br>
+
+            <div class="d-flex justify-content-space-between">
+                <div>
+                    <mat-form-field >
+                        <input matInput placeholder="ЄДРПОУ" formControlName="legal_id">
+                        @if (counterpartyForm.controls['legal_id'].hasError('required')) {
+                            <mat-error><strong>*</strong> Обов'язкове поле</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+
+                <div class="phone-input">
+                    <mat-form-field >
+                        <input matInput placeholder="Телефон" formControlName="phone">
+                        @if (counterpartyForm.controls['phone'].hasError('required')) {
+                            <mat-error><strong>*</strong> Обов'язкове поле</mat-error>
+                        } @else if (counterpartyForm.controls['phone'].hasError('minLength')) {
+                            <mat-error><strong>*</strong> Занадто короткий номер</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+
+                <div>
+                    <mat-form-field class="email-input">
+                        <input matInput placeholder="Ел. пошта" formControlName="email" class="email-input">
+                        @if (counterpartyForm.controls['email'].hasError('email')) {
+                            <mat-error><strong>*</strong> Некорректний формат</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+            </div>
+            <br>
+            
+            <div>
+                <mat-form-field class="full-width">
+                    <input matInput placeholder="Адреса" formControlName="address">
+                    @if (counterpartyForm.controls['address'].hasError('required')) {
+                        <mat-error><strong>*</strong> Обов'язкове поле</mat-error>
+                    }
+                </mat-form-field>
+            </div>
+            <br>
+
+            <div>
+                <mat-form-field class="full-width">
+                    <input matInput placeholder="Р/р" formControlName="account">
+                </mat-form-field>
+            </div>
+            <br>
+
+            <div class="d-flex justify-content-space-between">
+                <div class="bank-input">
+                    <mat-form-field class="full-width">
+                        <input matInput placeholder="Банк" formControlName="bank">
+                    </mat-form-field>
+                </div>
+                <div class="bank-id-input">
+                    <mat-form-field>
+                        <input matInput placeholder="МФО" formControlName="bank_id">
+                    </mat-form-field>
+                </div>
+            </div>
+
+        </mat-card-content>
+
+        <mat-card-actions>
+            <button matButton="filled"
+                    type="submit"
+                    [disabled]="counterpartyForm.invalid">
+                Зберегти
+            </button>
+            <button matButton="elevated" type="button" class="cancel-btn" (click)="onCancel()">
+                Скасувати
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</form>

@@ -17,7 +17,6 @@ export class ProductsCatalog {
 
   private productCatalogService = inject(ProductCatalogService);
   protected productCatalogData = toSignal( this.productCatalogService.getProductCatalog() );
-  protected productList = computed( () => this.productCatalogData()?.isOk ? this.productCatalogData()?.data : []);
 
   protected isAddingProduct = signal<boolean>(false);
 
