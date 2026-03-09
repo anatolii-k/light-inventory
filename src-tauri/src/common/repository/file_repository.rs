@@ -2,7 +2,7 @@ use std::{fs::{File, OpenOptions}, io::{BufRead, BufReader, BufWriter, Write}, m
 
 use serde::{Deserialize, Serialize};
 
-use crate::common::repository::BasicRepository;
+use crate::common::repository::{BasicRepository, Entity};
 
 enum FileMode {
     READ,
@@ -39,7 +39,8 @@ impl<T:Send> FileBasicRepository<T> {
 }
 
 impl <T:Send> BasicRepository<T> for FileBasicRepository<T>
-where for<'a> T: Serialize + Deserialize<'a> {
+where T : Entity,
+for<'a> T: Serialize + Deserialize<'a> {
 
     fn get_all(&mut self) -> Result<Vec<T>,String> {
 
@@ -78,5 +79,13 @@ where for<'a> T: Serialize + Deserialize<'a> {
             .map_err(|err| format!("Enable to write to file [{:?}]. Error: {}", file_path, err.to_string()))?;
 
         Ok(())
+    }
+
+    fn get_next_id(&mut self) -> Result<u32, String> {
+        let max_id = self.get_all()?.iter()
+            .map(|item| item.id())
+            .max()
+            .unwrap_or(0);
+        Ok(max_id + 1)
     }
 }

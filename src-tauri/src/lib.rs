@@ -9,7 +9,7 @@ use tauri::{App, Manager};
 use owner::get_owner_info;
 use product_catalog::get_product_catalog;
 use product_catalog::add_product_to_catalog;
-use crate::common::repository::BasicRepository;
+use crate::common::repository::{BasicRepository, Entity};
 use crate::common::repository::file_repository::FileBasicRepository;
 use crate::common::repository::file_repository_config::{DbEntity, FileRepositoryCofig};
 use crate::counterparty::{get_counterparties, Counterparty, add_counterparty};
@@ -20,7 +20,7 @@ type CounterpartiesRepository<'a> = tauri::State<'a, Mutex<Box<dyn BasicReposito
 
 fn register_repository_state<T>(app: &mut App, db_entity: DbEntity )
 where
-T: Send + 'static,
+T: Send + 'static + Entity,
 for<'a> T: Serialize + Deserialize<'a> + Send {
     let rep_file_path = FileRepositoryCofig::get_db_file_path_for(db_entity);
     let product_repository: Box::<dyn BasicRepository<T>> = Box::new(FileBasicRepository::<T>::new(rep_file_path));

@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
+use crate::common::repository::Entity;
 use crate::common::response::ResponseStatus;
 use crate::CounterpartiesRepository;
-use crate::product_catalog::{NewProductResponse, Product};
 
 #[derive(Serialize,Deserialize)]
 pub struct PaymentDetails {
@@ -19,6 +19,10 @@ pub struct Counterparty {
     pub email: Option<String>,
     pub address: String,
     pub payment_details: Option<PaymentDetails>,
+}
+
+impl Entity for Counterparty {
+    fn id(&self) -> u32 { self.id }
 }
 
 #[derive(Serialize,Deserialize)]
@@ -43,16 +47,11 @@ pub fn get_counterparties( repository: CounterpartiesRepository<'_> ) -> Counter
 
 #[tauri::command]
 pub fn add_counterparty( repository: CounterpartiesRepository<'_>, request: Counterparty ) -> ResponseStatus {
-    let all_items = match repository.lock().unwrap().get_all() {
-        Ok(product) => product,
+
+    let next_id = match repository.lock().unwrap().get_next_id() {
+        Ok(next_id) => next_id,
         Err(err) => return ResponseStatus { is_ok: false, error: err }
     };
-
-    let next_id = all_items.iter()
-        .map( |data| data.id)
-        .max()
-        .unwrap_or(0)
-        + 1;
 
     match repository.lock().unwrap().save_new_item( &Counterparty { id: next_id, ..request } ) {
         Ok(_) => ResponseStatus{ is_ok: true, error: String::new() },

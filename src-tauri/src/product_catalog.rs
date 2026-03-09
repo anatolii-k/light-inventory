@@ -1,4 +1,6 @@
 use serde::{Deserialize, Serialize};
+use crate::common::repository::Entity;
+use crate::common::response::ResponseStatus;
 use crate::ProductRepository;
 
 #[derive(Serialize,Deserialize)]
@@ -6,6 +8,10 @@ pub struct Product {
   id: u32,
   name: String,
   unit: String,
+}
+
+impl Entity for Product {
+    fn id(&self) -> u32 { self.id }
 }
 
 #[derive(Serialize)]
@@ -21,12 +27,6 @@ pub struct NewProductRequest {
   unit: String,
 }
 
-#[derive(Serialize)]
-pub struct NewProductResponse {
-  is_ok : bool,
-  error: String,
-}
-
 #[tauri::command]
 pub fn get_product_catalog( repository: ProductRepository<'_> ) -> ProductCatalogData {
     let result = repository.lock().unwrap().get_all();
@@ -37,23 +37,17 @@ pub fn get_product_catalog( repository: ProductRepository<'_> ) -> ProductCatalo
 }
 
 #[tauri::command]
-pub fn add_product_to_catalog(request: NewProductRequest, repository: ProductRepository<'_>) -> NewProductResponse {
-
-  let all_products = match repository.lock().unwrap().get_all() {
-      Ok(product) => product,
-      Err(err) => return NewProductResponse { is_ok: false, error: err }
-  };
-
-  let next_id = all_products.iter()
-  .map( |data| data.id)
-  .max()
-  .unwrap_or(0)
-  + 1;
+pub fn add_product_to_catalog(request: NewProductRequest, repository: ProductRepository<'_>) -> ResponseStatus {
+    
+    let next_id = match repository.lock().unwrap().get_next_id() {
+        Ok(next_id) => next_id,
+        Err(err) => return ResponseStatus { is_ok: false, error: err }
+    };
 
   match repository.lock().unwrap().save_new_item( &Product {
                                   id: next_id, name: request.name, unit: request.unit 
                                 } ) {
-    Ok(_) => NewProductResponse{ is_ok: true, error: String::new() },
-    Err(err) => NewProductResponse { is_ok: false, error: err },
+    Ok(_) => ResponseStatus{ is_ok: true, error: String::new() },
+    Err(err) => ResponseStatus { is_ok: false, error: err },
   }
 }
