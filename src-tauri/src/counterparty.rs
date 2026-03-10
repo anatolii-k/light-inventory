@@ -3,14 +3,14 @@ use crate::common::repository::Entity;
 use crate::common::response::ResponseStatus;
 use crate::CounterpartiesRepository;
 
-#[derive(Serialize,Deserialize)]
+#[derive(Serialize,Deserialize,Clone)]
 pub struct PaymentDetails {
     pub account: String,
     pub bank: String,
     pub bank_id: String,
 }
 
-#[derive(Serialize,Deserialize)]
+#[derive(Serialize,Deserialize,Clone)]
 pub struct Counterparty {
     pub id: u32,
     pub name: String,

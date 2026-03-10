@@ -3,7 +3,7 @@ use crate::common::repository::Entity;
 use crate::common::response::ResponseStatus;
 use crate::ProductRepository;
 
-#[derive(Serialize,Deserialize)]
+#[derive(Serialize,Deserialize,Clone)]
 pub struct Product {
   id: u32,
   name: String,

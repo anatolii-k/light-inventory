@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 
 pub mod file_repository;
 pub mod file_repository_config;
+pub mod cache;
 
 pub trait Entity {
    fn id(&self) -> u32;
