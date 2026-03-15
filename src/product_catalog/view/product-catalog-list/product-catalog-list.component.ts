@@ -24,7 +24,7 @@ export class ProductCatalogListComponent implements AfterViewInit {
   displayedColumns = ['id', 'name', 'unit'];
 
   ngAfterViewInit(): void {
-    this.paginator._intl.itemsPerPageLabel = "Товарів на сторінці:";
+    this.paginator._intl.itemsPerPageLabel = "Записів на сторінці:";
 
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;

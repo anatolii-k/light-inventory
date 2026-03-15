@@ -1,0 +1,21 @@
+<div class="stock">
+
+    <h2 class="label">Залишки по складу</h2>
+
+    @if( stockData()?.isOk ){
+
+        <app-stock-list [stockList]="stockData()?.data"></app-stock-list>
+    }
+    @else {
+        <app-error-alert [userError]="stockData()?.error" ></app-error-alert>
+        <div class="error-button-row">
+            <button matButton="filled" (click)="onReload()">
+                <mat-icon>refresh</mat-icon>
+                Перезавантажити
+            </button>
+        </div>
+    }
+
+</div>
+
+

@@ -2,6 +2,7 @@ mod owner;
 mod product_catalog;
 pub mod common;
 mod counterparty;
+mod stock_list;
 
 use std::sync::Mutex;
 use serde::{Deserialize, Serialize};
@@ -9,26 +10,37 @@ use tauri::{App, Manager};
 use owner::get_owner_info;
 use product_catalog::get_product_catalog;
 use product_catalog::add_product_to_catalog;
-use crate::common::repository::{BasicRepository, Entity};
+use crate::common::repository::{Entity};
 use crate::common::repository::cache::CachedBasicRepository;
 use crate::common::repository::file_repository::FileBasicRepository;
 use crate::common::repository::file_repository_config::{DbEntity, FileRepositoryCofig};
 use crate::counterparty::{get_counterparties, Counterparty, add_counterparty};
 use crate::product_catalog::Product;
+use crate::stock_list::{get_stock_list, StockItemEntity};
 
-type ProductRepository<'a> = tauri::State<'a, Mutex<Box<dyn BasicRepository<Product>>>>;
-type CounterpartiesRepository<'a> = tauri::State<'a, Mutex<Box<dyn BasicRepository<Counterparty>>>>;
+type ProductRepository<'a> = tauri::State<'a, Mutex<CachedBasicRepository<Product,FileBasicRepository<Product>>>>;
+type CounterpartiesRepository<'a> = tauri::State<'a, Mutex<CachedBasicRepository<Counterparty,FileBasicRepository<Counterparty>>>>;
+type StockRepository<'a> = tauri::State<'a, Mutex<FileBasicRepository<StockItemEntity>>>;
 
-fn register_repository_state<T>(app: &mut App, db_entity: DbEntity )
+fn register_cached_repository<T>(app: &mut App, db_entity: DbEntity )
 where
 T: Send + Sync + 'static + Entity + Clone,
 for<'a> T: Serialize + Deserialize<'a> + Send {
-    let rep_file_path = FileRepositoryCofig::get_db_file_path_for(db_entity);
-    let product_repository: Box::<dyn BasicRepository<T>> = Box::new(
-        CachedBasicRepository::<T>::new( Box::new(FileBasicRepository::<T>::new(rep_file_path)) )
-    );
-    app.manage(Mutex::new(product_repository));
+    let db_file_path = FileRepositoryCofig::get_db_file_path_for(db_entity);
+    let repository =  CachedBasicRepository::new( FileBasicRepository::<T>::new(db_file_path) );
 
+    app.manage(Mutex::new(repository));
+
+}
+
+fn register_repository<T>(app: &mut App, db_entity: DbEntity )
+where
+    T: Send + Sync + 'static + Entity + Clone,
+    for<'a> T: Serialize + Deserialize<'a> + Send {
+    let db_file_path = FileRepositoryCofig::get_db_file_path_for(db_entity);
+    let repository =  FileBasicRepository::<T>::new(db_file_path);
+
+    app.manage(Mutex::new(repository));
 }
 
 fn setup_app(app: &mut App) ->  std::result::Result<(), Box<dyn std::error::Error>> {
@@ -40,9 +52,9 @@ fn setup_app(app: &mut App) ->  std::result::Result<(), Box<dyn std::error::Erro
         )?;
     }
 
-    register_repository_state::<Product>(app, DbEntity::ProductCatalog);
-    register_repository_state::<Counterparty>(app, DbEntity::Counterparties);
-
+    register_cached_repository::<Product>(app, DbEntity::ProductCatalog);
+    register_cached_repository::<Counterparty>(app, DbEntity::Counterparties);
+    register_repository::<StockItemEntity>(app, DbEntity::Stock);
 
     Ok(())
 }
@@ -55,7 +67,8 @@ pub fn run() {
                                             get_product_catalog,
                                             add_product_to_catalog,
                                             get_counterparties,
-                                            add_counterparty
+                                            add_counterparty,
+                                            get_stock_list,
                                               ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");

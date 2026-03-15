@@ -2,12 +2,13 @@ use serde::{Deserialize, Serialize};
 use crate::common::repository::Entity;
 use crate::common::response::ResponseStatus;
 use crate::ProductRepository;
+use crate::common::repository::BasicRepository;
 
 #[derive(Serialize,Deserialize,Clone)]
 pub struct Product {
-  id: u32,
-  name: String,
-  unit: String,
+  pub id: u32,
+  pub name: String,
+  pub unit: String,
 }
 
 impl Entity for Product {

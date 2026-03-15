@@ -1,0 +1,46 @@
+<div class="mat-elevation-z2">
+
+    <!-- Sort & Paggination -->
+    <mat-paginator #paginator
+                   [length]="totalCount()"
+                   [pageIndex]="0"
+                   [pageSize]="10"
+                   [pageSizeOptions]="[5, 10, 20]"
+                   aria-label="Select page">
+    </mat-paginator>
+
+    <!-- TABLE -->
+    <table mat-table class="full-width-table" matSort aria-label="Elements">
+        <!-- Id Column -->
+        <ng-container matColumnDef="product_id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Код</th>
+            <td mat-cell *matCellDef="let row">{{row.product_id}}</td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="product_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Назва</th>
+            <td mat-cell *matCellDef="let row">{{row.product_name}}</td>
+        </ng-container>
+
+        <!-- Unit Column -->
+        <ng-container matColumnDef="total">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Всього</th>
+            <td mat-cell *matCellDef="let row">{{row.total}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="reserved">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Зарезервовано</th>
+            <td mat-cell *matCellDef="let row">{{row.reserved}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="available">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Доступно</th>
+            <td mat-cell *matCellDef="let row">{{row.available}}</td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>

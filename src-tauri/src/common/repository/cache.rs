@@ -6,16 +6,21 @@ struct CacheState<T> {
     data: Arc<Vec<T>>,
     invalidated: bool,
 }
-pub struct CachedBasicRepository<T:Send> {
-    repository: Box<dyn BasicRepository<T>>,
+pub struct CachedBasicRepository<T, R>
+where T: Entity + Clone + Send,
+for<'a> T: Serialize + Deserialize<'a>,
+R: BasicRepository<T>
+{
+    repository: R,
     cache: Mutex<CacheState<T>>,
 }
 
-impl<T> CachedBasicRepository<T>
+impl<T,R> CachedBasicRepository<T,R>
 where T : Entity + Clone + Send,
-      for<'a> T: Serialize + Deserialize<'a> {
+for<'a> T: Serialize + Deserialize<'a>,
+R: BasicRepository<T>,{
 
-    pub fn new(repository: Box<dyn BasicRepository<T>>) -> Self {
+    pub fn new(repository: R) -> Self {
         Self { repository, cache: Mutex::new(CacheState{data: Arc::new(Vec::new()), invalidated: true}) }
     }
 
@@ -32,9 +37,11 @@ where T : Entity + Clone + Send,
     }
 }
 
-impl<T> BasicRepository<T> for CachedBasicRepository<T>
+impl<T,R> BasicRepository<T> for CachedBasicRepository<T,R>
 where T : Entity + Clone + Send + Sync,
-      for<'a> T: Serialize + Deserialize<'a> {
+for<'a> T: Serialize + Deserialize<'a>,
+R: BasicRepository<T>
+{
 
     fn get_all(&mut self) -> Result<Vec<T>, String> {
         let items = self.get_all_ref()?;

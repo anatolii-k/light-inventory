@@ -28,7 +28,7 @@ export class CounterpartiesList implements AfterViewInit{
   displayedColumns = ['name', 'legal_id', 'address', 'expand'];
 
   ngAfterViewInit(): void {
-    this.paginator._intl.itemsPerPageLabel = "Контрагенів на сторінці:";
+    this.paginator._intl.itemsPerPageLabel = "Записів на сторінці:";
 
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;

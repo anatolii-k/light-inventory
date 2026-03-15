@@ -1,0 +1,15 @@
+.stock {
+    margin-top: 30px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.label {
+    text-align: center;
+}
+
+.error-button-row {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+}

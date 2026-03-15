@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 use crate::common::repository::Entity;
 use crate::common::response::ResponseStatus;
 use crate::CounterpartiesRepository;
+use crate::common::repository::BasicRepository;
 
 #[derive(Serialize,Deserialize,Clone)]
 pub struct PaymentDetails {
