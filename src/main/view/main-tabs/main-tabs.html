@@ -1,7 +1,7 @@
 <mat-tab-group>
   <mat-tab label="Залишки"> <app-stock></app-stock> </mat-tab>
-  <mat-tab label="Прихід"> Content 2 </mat-tab>
-  <mat-tab label="Видаток"> Content 3 </mat-tab>
+  <mat-tab label="Прихід"> <app-stock-action [actionType]="'IN'"></app-stock-action> </mat-tab>
+  <mat-tab label="Видаток"> <app-stock-action [actionType]="'OUT'"></app-stock-action> </mat-tab>
   <mat-tab label="Контрагенти"> <app-counterparties></app-counterparties> </mat-tab>
   <mat-tab label="Каталог товарів"> <app-products-catalog></app-products-catalog> </mat-tab>
 </mat-tab-group>

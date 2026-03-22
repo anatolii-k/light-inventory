@@ -1,0 +1,80 @@
+<form [formGroup]="stockActionForm" novalidate (ngSubmit)="onSubmit()">
+    <mat-card class="stock-action-form">
+
+        <mat-card-header>
+            <mat-card-title>Зареєструвати Нову Накладну</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <div class="d-flex">
+                <div class="invoice-number-input">
+                    <mat-form-field class="full-width">
+                        <mat-label>Номер накладної</mat-label>
+                        <input matInput formControlName="invoice_number">
+                        @if (stockActionForm.controls['invoice_number'].hasError('required')) {
+                            <mat-error><strong>*</strong> Обов'язкове поле</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field class="example-form-field">
+                        <mat-label>Дата накладної</mat-label>
+                        <input matInput [matDatepicker]="datepicker" formControlName="invoice_date"/>
+                        <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+                        <mat-datepicker #datepicker>
+                            <mat-datepicker-actions>
+                                <button matButton matDatepickerCancel>Скасувати</button>
+                                <button matButton="elevated" matDatepickerApply>Підтвердити</button>
+                            </mat-datepicker-actions>
+                        </mat-datepicker>
+                        @if (stockActionForm.controls['invoice_date'].hasError('required')) {
+                            <mat-error><strong>*</strong> Обов'язкове поле</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+                <div class="counterparty-input">
+                    <mat-form-field class="full-width">
+                        <mat-label>{{actionType() == "IN" ? 'Постачальник' : 'Отримувач'}}</mat-label>
+                        <input #counterpartyInput
+                               type="text"
+                               placeholder="Pick one"
+                               matInput
+                               formControlName="counterparty"
+                               [matAutocomplete]="auto"
+                               (input)="filter()"
+                               (focus)="filter()">
+                        <mat-autocomplete requireSelection
+                                          #auto="matAutocomplete"
+                                          [displayWith]="displayCounterparty">
+                            @for (option of filteredCounterpartiesList; track option.id) {
+                                <mat-option [value]="option">{{option.name}}</mat-option>
+                            }
+                        </mat-autocomplete>
+                        @if (stockActionForm.controls['counterparty'].hasError('required')) {
+                            <mat-error><strong>*</strong> Обов'язкове поле</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <br>
+
+            <mat-divider></mat-divider>
+
+
+        </mat-card-content>
+
+        <mat-card-actions>
+            <button matButton="filled"
+                    type="submit"
+                    [disabled]="stockActionForm.invalid||stockActionForm.pending">
+                Зберегти
+            </button>
+            <button matButton="elevated" type="button" class="cancel-btn" (click)="onCancel()">
+                Скасувати
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</form>
+

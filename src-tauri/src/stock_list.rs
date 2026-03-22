@@ -5,21 +5,27 @@ use crate::{ProductRepository, StockRepository};
 use crate::product_catalog::Product;
 
 #[derive(Serialize,Deserialize,Clone)]
-pub struct StockItemEntity {
+pub struct StockItem {
     pub id: u32,
     pub product_id: u32,
     pub total: u32,
     pub reserved: u32,
 }
 
-impl Entity for StockItemEntity {
+impl StockItem {
+    pub fn get_available(&self) -> u32 {
+        self.total - self.reserved
+    }
+}
+
+impl Entity for StockItem {
     fn id(&self) -> u32 {
         self.id
     }
 }
 
 #[derive(Serialize,Deserialize,Clone)]
-pub struct StockItem {
+pub struct StockItemDTO {
     pub id: u32,
     pub product_id: u32,
     pub product_name: String,
@@ -31,7 +37,7 @@ pub struct StockItem {
 #[derive(Serialize,Deserialize)]
 pub struct StockListData {
     pub status: ResponseStatus,
-    pub data: Vec<StockItem>,
+    pub data: Vec<StockItemDTO>,
 }
 
 fn get_product_name( product_id: u32, product_list: &Vec<Product>) -> String {
@@ -44,16 +50,16 @@ fn get_product_name( product_id: u32, product_list: &Vec<Product>) -> String {
     }
 }
 
-fn combine_data(stock_list: &Vec<StockItemEntity>, product_list: &Vec<Product>) -> Vec<StockItem> {
+fn combine_data(stock_list: &Vec<StockItem>, product_list: &Vec<Product>) -> Vec<StockItemDTO> {
     stock_list.iter()
         .map(|db_item| {
             let product_name = get_product_name(db_item.product_id, product_list);
-            StockItem{ id:db_item.id,
+            StockItemDTO { id:db_item.id,
                 product_id: db_item.product_id,
                 product_name,
                 total: db_item.total,
                 reserved: db_item.reserved,
-                available: db_item.total - db_item.reserved}
+                available: db_item.get_available() }
         })
     .collect()
 }

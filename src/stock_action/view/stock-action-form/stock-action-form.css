@@ -1,0 +1,36 @@
+mat-card-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding-bottom: 20px;
+}
+
+mat-card-header {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.stock-action-form {
+    min-width: 500px;
+    margin: 50px;
+}
+
+
+.cancel-btn {
+    --mat-button-protected-label-text-color: var(--mat-sys-error);
+}
+
+.invoice-number-input {
+    width: 20rem;
+    margin-right: 1rem;
+}
+
+.counterparty-input {
+    width: 100%;
+    margin-left: 1rem;
+}

@@ -16,11 +16,11 @@ use crate::common::repository::file_repository::FileBasicRepository;
 use crate::common::repository::file_repository_config::{DbEntity, FileRepositoryCofig};
 use crate::counterparty::{get_counterparties, Counterparty, add_counterparty};
 use crate::product_catalog::Product;
-use crate::stock_list::{get_stock_list, StockItemEntity};
+use crate::stock_list::{get_stock_list, StockItem};
 
 type ProductRepository<'a> = tauri::State<'a, Mutex<CachedBasicRepository<Product,FileBasicRepository<Product>>>>;
 type CounterpartiesRepository<'a> = tauri::State<'a, Mutex<CachedBasicRepository<Counterparty,FileBasicRepository<Counterparty>>>>;
-type StockRepository<'a> = tauri::State<'a, Mutex<FileBasicRepository<StockItemEntity>>>;
+type StockRepository<'a> = tauri::State<'a, Mutex<FileBasicRepository<StockItem>>>;
 
 fn register_cached_repository<T>(app: &mut App, db_entity: DbEntity )
 where
@@ -54,7 +54,7 @@ fn setup_app(app: &mut App) ->  std::result::Result<(), Box<dyn std::error::Erro
 
     register_cached_repository::<Product>(app, DbEntity::ProductCatalog);
     register_cached_repository::<Counterparty>(app, DbEntity::Counterparties);
-    register_repository::<StockItemEntity>(app, DbEntity::Stock);
+    register_repository::<StockItem>(app, DbEntity::Stock);
 
     Ok(())
 }
